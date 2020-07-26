@@ -1,9 +1,9 @@
-let drawButton: any = document.getElementById("draw");
-let paramHandlers: any = document.getElementsByClassName("param_handler");
-let sumHandler: any = document.getElementById("sum");
-let usedHandler: any = document.getElementById("used");
-let differenceHandler: any = document.getElementById("difference");
-let allButtons: any = document.getElementsByTagName("button");
+const drawButton: any = document.getElementById("draw");
+const paramHandlers: any = document.getElementsByClassName("param_handler");
+const sumHandler: any = document.getElementById("sum");
+const usedHandler: any = document.getElementById("used");
+const differenceHandler: any = document.getElementById("difference");
+const allButtons: any = document.getElementsByTagName("button");
 
 var drawnParameters: number[] = [0, 0, 0, 0, 0, 0];
 var sumOfDrawnParameters: number;
@@ -11,14 +11,14 @@ var usedParameterPoints: number;
 var differenceBetweenDrawnAndUsed: number;
 
 const drawAllParameters = (e: MouseEvent) => {
-    let i = 0;
 
     drawParam();
-
-    for (let param of paramHandlers) {
-        param.innerText = drawnParameters[i];
+    
+    let i:number = 0;
+    
+    for (let handler of paramHandlers){
+        handler.innerText = drawnParameters[i];
         i++;
-
     }
 
     usedParameterPoints = sumOfDrawnParameters;
@@ -26,12 +26,20 @@ const drawAllParameters = (e: MouseEvent) => {
 
     sumHandler.innerText = sumOfDrawnParameters;
 
-    setUsedDifferenceHandlersValue(usedParameterPoints,
-        differenceBetweenDrawnAndUsed);
+    setUsedDifferenceHandlersValue();
 
 };
 
 drawButton?.addEventListener('click', drawAllParameters);
+
+for (let i = 0; i < allButtons.length - 1; i++) {
+    let id: number = allButtons[i].id;
+    if (i % 2) {
+        allButtons[i]?.addEventListener('click', () => increaseParameterValue(id));
+    } else {
+        allButtons[i]?.addEventListener('click', () => decreaseParameterValue(id));
+    }
+}
 
 function drawParam() {
     sumOfDrawnParameters = 0;
@@ -41,7 +49,30 @@ function drawParam() {
     }
 };
 
-function setUsedDifferenceHandlersValue(used: number, difference: number): void {
-    usedHandler.innerText = used;
-    differenceHandler.innerText = difference;
+function setUsedDifferenceHandlersValue(): void {
+    usedHandler.innerText = usedParameterPoints;
+    differenceHandler.innerText = differenceBetweenDrawnAndUsed;
+}
+
+function increaseParameterValue(id: number): void {
+    if (drawnParameters[id] < 18 && differenceBetweenDrawnAndUsed > 0 && sumOfDrawnParameters > 0) {
+        drawnParameters[id]++;
+        usedParameterPoints++;
+        differenceBetweenDrawnAndUsed--;
+        refreshHTMLdata(id);
+    }
+}
+
+function decreaseParameterValue(id: number): void {
+    if (drawnParameters[id] > 6 && sumOfDrawnParameters > 0) {
+        drawnParameters[id]--;
+        usedParameterPoints--;
+        differenceBetweenDrawnAndUsed++;
+        refreshHTMLdata(id);
+    }
+}
+
+function refreshHTMLdata(id: number): void {
+    paramHandlers[id].innerText = drawnParameters[id];
+    setUsedDifferenceHandlersValue();
 }
