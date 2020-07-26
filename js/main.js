@@ -1,11 +1,11 @@
 "use strict";
 var _a, _b;
-const drawButton = document.getElementById("draw");
+const drawButtonHandler = document.getElementById("draw");
 const paramHandlers = document.getElementsByClassName("param_handler");
 const sumHandler = document.getElementById("sum");
 const usedHandler = document.getElementById("used");
 const differenceHandler = document.getElementById("difference");
-const allButtons = document.getElementsByTagName("button");
+const allButtonsHandlers = document.getElementsByTagName("button");
 var drawnParameters = [0, 0, 0, 0, 0, 0];
 var sumOfDrawnParameters;
 var usedParameterPoints;
@@ -22,14 +22,14 @@ const drawAllParameters = (e) => {
     sumHandler.innerText = sumOfDrawnParameters;
     setUsedDifferenceHandlersValue();
 };
-drawButton === null || drawButton === void 0 ? void 0 : drawButton.addEventListener('click', drawAllParameters);
-for (let i = 0; i < allButtons.length - 1; i++) {
-    let id = allButtons[i].id;
+drawButtonHandler === null || drawButtonHandler === void 0 ? void 0 : drawButtonHandler.addEventListener('click', drawAllParameters);
+for (let i = 0; i < allButtonsHandlers.length - 1; i++) {
+    let id = allButtonsHandlers[i].id;
     if (i % 2) {
-        (_a = allButtons[i]) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => increaseParameterValue(id));
+        (_a = allButtonsHandlers[i]) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => increaseParameterValue(id));
     }
     else {
-        (_b = allButtons[i]) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => decreaseParameterValue(id));
+        (_b = allButtonsHandlers[i]) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => decreaseParameterValue(id));
     }
 }
 function drawParam() {

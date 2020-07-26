@@ -1,9 +1,9 @@
-const drawButton: any = document.getElementById("draw");
+const drawButtonHandler: any = document.getElementById("draw");
 const paramHandlers: any = document.getElementsByClassName("param_handler");
 const sumHandler: any = document.getElementById("sum");
 const usedHandler: any = document.getElementById("used");
 const differenceHandler: any = document.getElementById("difference");
-const allButtons: any = document.getElementsByTagName("button");
+const allButtonsHandlers: any = document.getElementsByTagName("button");
 
 var drawnParameters: number[] = [0, 0, 0, 0, 0, 0];
 var sumOfDrawnParameters: number;
@@ -30,14 +30,14 @@ const drawAllParameters = (e: MouseEvent) => {
 
 };
 
-drawButton?.addEventListener('click', drawAllParameters);
+drawButtonHandler?.addEventListener('click', drawAllParameters);
 
-for (let i = 0; i < allButtons.length - 1; i++) {
-    let id: number = allButtons[i].id;
+for (let i = 0; i < allButtonsHandlers.length - 1; i++) {
+    let id: number = allButtonsHandlers[i].id;
     if (i % 2) {
-        allButtons[i]?.addEventListener('click', () => increaseParameterValue(id));
+        allButtonsHandlers[i]?.addEventListener('click', () => increaseParameterValue(id));
     } else {
-        allButtons[i]?.addEventListener('click', () => decreaseParameterValue(id));
+        allButtonsHandlers[i]?.addEventListener('click', () => decreaseParameterValue(id));
     }
 }
 
