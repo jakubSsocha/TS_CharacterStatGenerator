@@ -7,6 +7,10 @@
     <title>Generator Statystyk Postaci v 1.0</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 
 <body>
@@ -94,13 +98,214 @@
             <br>
 
             <button class="btn btn-primary" id="draw">Losuj</button>
-            <button class="btn btn-success" id="save" style="margin-left: 30px; margin-right: 30px;">Zapisz</button>
-            <button class="btn btn-warning" id="load">Wczytaj</button>
+            <button class="btn btn-success" style="margin-left: 30px; margin-right: 30px;" data-toggle="modal" data-target="#saveDataModal">Zapisz</button>
+            <button class="btn btn-warning" data-toggle="modal" data-target="#loadDataModal">Wczytaj</button>
         </div>
 
         <div class="col-lg-2"></div>
 
     </div>
+
+  <!-- saveDataModal -->
+  <div class="modal fade" id="saveDataModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+      
+        <div class="modal-header">
+          <h4 class="modal-title">Czy chcesz zapisać wyniki losowania?</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+            <table class="table" style="text-align: center">
+                
+                <thead>
+                    <tr>
+                        <th>Parametr</th>
+                        <th>Wartość</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr>
+                        <td>Siła</td>
+                        <td class="param_handler_save">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Zręczność</td>
+                        <td class="param_handler_save">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Wytrzymałość</td>
+                        <td class="param_handler_save">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Mądrość</td>
+                        <td class="param_handler_save">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Inteligencja</td>
+                        <td class="param_handler_save">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Charyzma</td>
+                        <td class="param_handler_save">0</td>
+                    </tr>
+
+                    <tr>
+                        <th>Suma</th>
+                        <th id="sum_save">0</th>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-success" id="save" style="margin-right: 10px;" data-dismiss="modal">Zapisz</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Wróc</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    <!-- loadDataModal -->
+    <div class="modal fade" id="loadDataModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+          
+            <div class="modal-header">
+              <h4 class="modal-title">Czy chcesz wczytać zapisane wartości?</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="row">
+              <div class="col-sm-5">
+                <table class="table" style="text-align: center">
+                
+                    <thead>
+                        <tr>
+                            <th>Parametr</th>
+                            <th>Wartość</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr>
+                            <td>Siła</td>
+                            <td class="param_handler_oldValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Zręczność</td>
+                            <td class="param_handler_oldValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Wytrzymałość</td>
+                            <td class="param_handler_oldValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Mądrość</td>
+                            <td class="param_handler_oldValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Inteligencja</td>
+                            <td class="param_handler_oldValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Charyzma</td>
+                            <td class="param_handler_oldValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <th>Suma</th>
+                            <th id="sum_oldValues">0</th>
+                        </tr>
+    
+                    </tbody>
+    
+                </table>
+              </div>
+
+              <div class="col-sm-2" style="text-align: center; margin-top: 20%;">
+                <i class='fas fa-angle-double-right' style='font-size:48px;color:green'></i>
+              </div>
+
+              <div class="col-sm-5">
+                <table class="table" style="text-align: center">
+                
+                    <thead>
+                        <tr>
+                            <th>Parametr</th>
+                            <th>Wartość</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr>
+                            <td>Siła</td>
+                            <td class="param_handler_newValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Zręczność</td>
+                            <td class="param_handler_newValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Wytrzymałość</td>
+                            <td class="param_handler_newValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Mądrość</td>
+                            <td class="param_handler_newValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Inteligencja</td>
+                            <td class="param_handler_newValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <td>Charyzma</td>
+                            <td class="param_handler_newValues">0</td>
+                        </tr>
+    
+                        <tr>
+                            <th>Suma</th>
+                            <th id="sum_newValues">0</th>
+                        </tr>
+    
+                    </tbody>
+    
+                </table>
+              </div>
+
+            </div>
+
+            </div>
+            
+            <div class="modal-footer">
+              <button class="btn btn-warning" id="load" style="margin-right: 30px;" data-dismiss="modal">Wczytaj</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">X</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
 
 </body>
 
