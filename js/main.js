@@ -24,11 +24,25 @@ var savedParameters = [0, 0, 0, 0, 0, 0];
 var sumOfDrawnParameters = 0;
 var differenceBetweenDrawnAndUsed = 0;
 /** -------------------- events binding with proper html handlers -------------------- */
-drawButtonHandler === null || drawButtonHandler === void 0 ? void 0 : drawButtonHandler.addEventListener("click", () => {
+drawButtonHandler === null || drawButtonHandler === void 0 ? void 0 : drawButtonHandler.addEventListener("click", () => drawButtonService());
+saveButtonHandler === null || saveButtonHandler === void 0 ? void 0 : saveButtonHandler.addEventListener("click", () => saveButtonService());
+loadButtonHandler === null || loadButtonHandler === void 0 ? void 0 : loadButtonHandler.addEventListener("click", () => loadButtonService());
+/** binding increasing and decresing functions to proper parameter buttons */
+for (let i = 0; i < allButtonsHandlers.length - 3; i++) {
+    let id = allButtonsHandlers[i].id;
+    if (i % 2) {
+        (_a = allButtonsHandlers[i]) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => increaseParamButtonService(id));
+    }
+    else {
+        (_b = allButtonsHandlers[i]) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => decreaseParamButtonService(id));
+    }
+}
+/** -------------------- services -------------------- */
+function drawButtonService() {
     generateParamsRandomValues();
     alertBox.style.visibility = "hidden";
-});
-saveButtonHandler === null || saveButtonHandler === void 0 ? void 0 : saveButtonHandler.addEventListener("click", () => {
+}
+function saveButtonService() {
     if (checkActionConditions()) {
         saveDrawnParamsInMemory();
         alertBox.style.visibility = "hidden";
@@ -36,20 +50,16 @@ saveButtonHandler === null || saveButtonHandler === void 0 ? void 0 : saveButton
     else {
         alertBox.style.visibility = "visible";
     }
-});
-loadButtonHandler === null || loadButtonHandler === void 0 ? void 0 : loadButtonHandler.addEventListener("click", () => {
+}
+function loadButtonService() {
     loadParamsFromMemory();
     alertBox.style.visibility = "hidden";
-});
-/** binding increasing and decresing functions to proper parameter buttons */
-for (let i = 0; i < allButtonsHandlers.length - 3; i++) {
-    let id = allButtonsHandlers[i].id;
-    if (i % 2) {
-        (_a = allButtonsHandlers[i]) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => increaseParamValue(id));
-    }
-    else {
-        (_b = allButtonsHandlers[i]) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => decreaseParamValue(id));
-    }
+}
+function increaseParamButtonService(id) {
+    increaseParamValue(id);
+}
+function decreaseParamButtonService(id) {
+    decreaseParamValue(id);
 }
 /** -------------------- condition checkers -------------------- */
 function checkIncreaseParamConditions(id) {

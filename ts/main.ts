@@ -1,4 +1,4 @@
-/** -------------------- Html Handlers declarations -------------------- */
+/** -------------------- Html Handlers -------------------- */
 
 /** buttons */
 const drawButtonHandler: any = document.getElementById("draw");
@@ -35,39 +35,51 @@ var savedParameters: number[] = [0, 0, 0, 0, 0, 0];
 var sumOfDrawnParameters: number = 0;
 var differenceBetweenDrawnAndUsed: number = 0;
 
-/** -------------------- events binding with proper html handlers -------------------- */
+/** -------------------- events binding with html handlers -------------------- */
 
-drawButtonHandler?.addEventListener("click", () => {
-    generateParamsRandomValues();
-    alertBox.style.visibility = "hidden"; 
-});
+drawButtonHandler?.addEventListener("click", () => drawButtonService());
 
-saveButtonHandler?.addEventListener("click", () => {
-    if(checkActionConditions()){
-       saveDrawnParamsInMemory();
-       alertBox.style.visibility = "hidden"; 
-    } else {
-        alertBox.style.visibility = "visible";
-    }
-});
+saveButtonHandler?.addEventListener("click", () => saveButtonService());
 
-loadButtonHandler?.addEventListener("click", () => {
-    loadParamsFromMemory();
-    alertBox.style.visibility = "hidden"; 
-});
+loadButtonHandler?.addEventListener("click", () => loadButtonService());
 
 /** binding increasing and decresing functions to proper parameter buttons */
 for (let i = 0; i < allButtonsHandlers.length - 3; i++) {
   let id: number = allButtonsHandlers[i].id;
   if (i % 2) {
-    allButtonsHandlers[i]?.addEventListener("click", () =>
-      increaseParamValue(id)
-    );
+    allButtonsHandlers[i]?.addEventListener("click", () => increaseParamButtonService(id));
   } else {
-    allButtonsHandlers[i]?.addEventListener("click", () =>
-      decreaseParamValue(id)
-    );
+    allButtonsHandlers[i]?.addEventListener("click", () => decreaseParamButtonService(id));
   }
+}
+
+/** -------------------- services -------------------- */
+
+function drawButtonService(): void {
+  generateParamsRandomValues();
+  alertBox.style.visibility = "hidden";
+}
+
+function saveButtonService(): void {
+  if (checkActionConditions()) {
+    saveDrawnParamsInMemory();
+    alertBox.style.visibility = "hidden";
+  } else {
+    alertBox.style.visibility = "visible";
+  }
+}
+
+function loadButtonService(): void {
+  loadParamsFromMemory();
+  alertBox.style.visibility = "hidden";
+}
+
+function increaseParamButtonService(id: number): void {
+  increaseParamValue(id);
+}
+
+function decreaseParamButtonService(id: number): void {
+  decreaseParamValue(id);
 }
 
 /** -------------------- condition checkers -------------------- */
@@ -85,25 +97,25 @@ function checkDecreaseParamConditions(id: number): boolean {
 }
 
 function checkActionConditions(): boolean {
-    return differenceBetweenDrawnAndUsed === 0;
+  return differenceBetweenDrawnAndUsed === 0;
 }
 
 /** -------------------- main functions -------------------- */
 
 function generateParamsRandomValues(): void {
-    drawAllRandomParams();
-    writeDrawnParamsInHtml();
+  drawAllRandomParams();
+  writeDrawnParamsInHtml();
 }
 
 function saveDrawnParamsInMemory(): void {
-    savedParameters = setTo(drawnParameters);
-    setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
-    loadModalOldSumHandler.innerText = getSum(savedParameters);
+  savedParameters = setTo(drawnParameters);
+  setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
+  loadModalOldSumHandler.innerText = getSum(savedParameters);
 }
 
 function loadParamsFromMemory(): void {
-    drawnParameters = setTo(savedParameters);
-    writeDrawnParamsInHtml();
+  drawnParameters = setTo(savedParameters);
+  writeDrawnParamsInHtml();
 }
 
 function increaseParamValue(id: number): void {
@@ -111,7 +123,7 @@ function increaseParamValue(id: number): void {
     drawnParameters[id]++;
     differenceBetweenDrawnAndUsed--;
     refreshAllParamsHandlersInMainPageAndModals();
-    alertBox.style.visibility = "hidden"; 
+    alertBox.style.visibility = "hidden";
   }
 }
 
@@ -120,18 +132,17 @@ function decreaseParamValue(id: number): void {
     drawnParameters[id]--;
     differenceBetweenDrawnAndUsed++;
     refreshAllParamsHandlersInMainPageAndModals();
-    alertBox.style.visibility = "hidden"; 
+    alertBox.style.visibility = "hidden";
   }
 }
 
-
 /** -------------------- specific functions -------------------- */
 
-function refreshAllParamsHandlersInMainPageAndModals(){
-    setInnerTextInHtmlHandlers(drawnParameters, mainPageParamHandlers);
-    setInnerTextInHtmlHandlers(drawnParameters, saveModalParamHandlers);
-    setInnerTextInHtmlHandlers(drawnParameters, loadModalParamNewValues);
-    differenceHandler. innerText = differenceBetweenDrawnAndUsed;
+function refreshAllParamsHandlersInMainPageAndModals() {
+  setInnerTextInHtmlHandlers(drawnParameters, mainPageParamHandlers);
+  setInnerTextInHtmlHandlers(drawnParameters, saveModalParamHandlers);
+  setInnerTextInHtmlHandlers(drawnParameters, loadModalParamNewValues);
+  differenceHandler.innerText = differenceBetweenDrawnAndUsed;
 }
 
 function drawAllRandomParams() {
@@ -141,7 +152,6 @@ function drawAllRandomParams() {
 }
 
 function writeDrawnParamsInHtml() {
-
   sumOfDrawnParameters = getSum(drawnParameters);
 
   differenceBetweenDrawnAndUsed = 0;
@@ -166,6 +176,6 @@ function getSum(parameters: number[]): number {
   return parameters.reduce((a, b) => a + b, 0);
 }
 
-function setTo(values: any[]): any[]{
-    return Object.assign([], values);
+function setTo(values: any[]): any[] {
+  return Object.assign([], values);
 }
