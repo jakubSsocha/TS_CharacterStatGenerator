@@ -64,7 +64,7 @@ for (let i = 0; i < paramButtonsHandlers.length; i++) {
 function drawButtonService(): void {
   drawAllRandomParams();
   hideAlertBox();
-  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  refreshAllParamsHandlersInMainPageAndModals();
   setSumAndDifferenceHandlersValuesInMainPageAndModals();
 }
 
@@ -82,19 +82,19 @@ function loadButtonService(): void {
   loadParamsFromMemory();
   refreshLoadModalOldSumAndParamHandlers();
   hideAlertBox();
-  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  refreshAllParamsHandlersInMainPageAndModals();
   setSumAndDifferenceHandlersValuesInMainPageAndModals();
 }
 
 function increaseParamButtonService(id: number): void {
   increaseParamValue(id);
-  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  refreshAllParamsHandlersInMainPageAndModals();
   hideAlertBox();
 }
 
 function decreaseParamButtonService(id: number): void {
   decreaseParamValue(id);
-  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  refreshAllParamsHandlersInMainPageAndModals();
   hideAlertBox();
 }
 
@@ -116,43 +116,19 @@ function checkActionConditions(): boolean {
   return differenceBetweenDrawnAndUsed === 0;
 }
 
-/** -------------------- main functions -------------------- */
 
-function saveDrawnParamsInMemory(): void {
-  savedParameters = setTo(drawnParameters);
-}
-
-function loadParamsFromMemory(): void {
-  drawnParameters = setTo(savedParameters);
-}
-
-function increaseParamValue(id: number): void {
-  if (checkIncreaseParamConditions(id)) {
-    drawnParameters[id]++;
-    differenceBetweenDrawnAndUsed--;
-  }
-}
-
-function decreaseParamValue(id: number): void {
-  if (checkDecreaseParamConditions(id)) {
-    drawnParameters[id]--;
-    differenceBetweenDrawnAndUsed++;
-  }
-}
-
-/** -------------------- specific functions -------------------- */
-
+/** -------------------- functions -------------------- */
 
 /** html functionalities */
 
-function refreshParamsHandlersInMainPageAndLoadNewAndSaveModals() {
+function refreshAllParamsHandlersInMainPageAndModals() {
   setInnerTextInHtmlHandlers(drawnParameters, mainPageParamHandlers);
   setInnerTextInHtmlHandlers(drawnParameters, saveModalParamHandlers);
   setInnerTextInHtmlHandlers(drawnParameters, loadModalParamNewValues);
   differenceHandler.innerText = differenceBetweenDrawnAndUsed;
 }
 
-function refreshLoadModalOldSumAndParamHandlers(){
+function refreshLoadModalOldSumAndParamHandlers() {
   setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
   loadModalOldSumHandler.innerText = getSum(savedParameters);
 }
@@ -184,6 +160,28 @@ function setInnerTextInHtmlHandlers(
 }
 
 /** others */
+
+function saveDrawnParamsInMemory(): void {
+  savedParameters = setTo(drawnParameters);
+}
+
+function loadParamsFromMemory(): void {
+  drawnParameters = setTo(savedParameters);
+}
+
+function increaseParamValue(id: number): void {
+  if (checkIncreaseParamConditions(id)) {
+    drawnParameters[id]++;
+    differenceBetweenDrawnAndUsed--;
+  }
+}
+
+function decreaseParamValue(id: number): void {
+  if (checkDecreaseParamConditions(id)) {
+    drawnParameters[id]--;
+    differenceBetweenDrawnAndUsed++;
+  }
+}
 
 function drawAllRandomParams() {
   for (let i = 0; i < 6; i++) {
