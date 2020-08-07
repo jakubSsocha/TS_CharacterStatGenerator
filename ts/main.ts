@@ -4,7 +4,9 @@
 const drawButtonHandler: any = document.getElementById("draw");
 const saveButtonHandler: any = document.getElementById("save");
 const loadButtonHandler: any = document.getElementById("load");
-const allButtonsHandlers: any = document.getElementsByTagName("button");
+const paramButtonsHandlers: any = document.getElementsByClassName(
+  "param_button"
+);
 
 /** items selected by class name */
 const mainPageParamHandlers: any = document.getElementsByClassName(
@@ -44,42 +46,56 @@ saveButtonHandler?.addEventListener("click", () => saveButtonService());
 loadButtonHandler?.addEventListener("click", () => loadButtonService());
 
 /** binding increasing and decresing functions to proper parameter buttons */
-for (let i = 0; i < allButtonsHandlers.length - 3; i++) {
-  let id: number = allButtonsHandlers[i].id;
+for (let i = 0; i < paramButtonsHandlers.length; i++) {
+  let id: number = paramButtonsHandlers[i].id;
   if (i % 2) {
-    allButtonsHandlers[i]?.addEventListener("click", () => increaseParamButtonService(id));
+    paramButtonsHandlers[i]?.addEventListener("click", () =>
+      increaseParamButtonService(id)
+    );
   } else {
-    allButtonsHandlers[i]?.addEventListener("click", () => decreaseParamButtonService(id));
+    paramButtonsHandlers[i]?.addEventListener("click", () =>
+      decreaseParamButtonService(id)
+    );
   }
 }
 
 /** -------------------- services -------------------- */
 
 function drawButtonService(): void {
-  generateParamsRandomValues();
-  alertBox.style.visibility = "hidden";
+  drawAllRandomParams();
+  hideAlertBox();
+  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  setSumAndDifferenceHandlersValuesInMainPageAndModals();
 }
 
 function saveButtonService(): void {
   if (checkActionConditions()) {
     saveDrawnParamsInMemory();
-    alertBox.style.visibility = "hidden";
+    refreshLoadModalOldSumAndParamHandlers();
+    hideAlertBox();
   } else {
-    alertBox.style.visibility = "visible";
+    showAlertBox();
   }
 }
 
 function loadButtonService(): void {
   loadParamsFromMemory();
-  alertBox.style.visibility = "hidden";
+  refreshLoadModalOldSumAndParamHandlers();
+  hideAlertBox();
+  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  setSumAndDifferenceHandlersValuesInMainPageAndModals();
 }
 
 function increaseParamButtonService(id: number): void {
   increaseParamValue(id);
+  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  hideAlertBox();
 }
 
 function decreaseParamButtonService(id: number): void {
   decreaseParamValue(id);
+  refreshParamsHandlersInMainPageAndLoadNewAndSaveModals();
+  hideAlertBox();
 }
 
 /** -------------------- condition checkers -------------------- */
@@ -102,28 +118,18 @@ function checkActionConditions(): boolean {
 
 /** -------------------- main functions -------------------- */
 
-function generateParamsRandomValues(): void {
-  drawAllRandomParams();
-  writeDrawnParamsInHtml();
-}
-
 function saveDrawnParamsInMemory(): void {
   savedParameters = setTo(drawnParameters);
-  setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
-  loadModalOldSumHandler.innerText = getSum(savedParameters);
 }
 
 function loadParamsFromMemory(): void {
   drawnParameters = setTo(savedParameters);
-  writeDrawnParamsInHtml();
 }
 
 function increaseParamValue(id: number): void {
   if (checkIncreaseParamConditions(id)) {
     drawnParameters[id]++;
     differenceBetweenDrawnAndUsed--;
-    refreshAllParamsHandlersInMainPageAndModals();
-    alertBox.style.visibility = "hidden";
   }
 }
 
@@ -131,36 +137,41 @@ function decreaseParamValue(id: number): void {
   if (checkDecreaseParamConditions(id)) {
     drawnParameters[id]--;
     differenceBetweenDrawnAndUsed++;
-    refreshAllParamsHandlersInMainPageAndModals();
-    alertBox.style.visibility = "hidden";
   }
 }
 
 /** -------------------- specific functions -------------------- */
 
-function refreshAllParamsHandlersInMainPageAndModals() {
+
+/** html functionalities */
+
+function refreshParamsHandlersInMainPageAndLoadNewAndSaveModals() {
   setInnerTextInHtmlHandlers(drawnParameters, mainPageParamHandlers);
   setInnerTextInHtmlHandlers(drawnParameters, saveModalParamHandlers);
   setInnerTextInHtmlHandlers(drawnParameters, loadModalParamNewValues);
   differenceHandler.innerText = differenceBetweenDrawnAndUsed;
 }
 
-function drawAllRandomParams() {
-  for (let i = 0; i < 6; i++) {
-    drawnParameters[i] = Math.floor(Math.random() * 13) + 6;
-  }
+function refreshLoadModalOldSumAndParamHandlers(){
+  setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
+  loadModalOldSumHandler.innerText = getSum(savedParameters);
 }
 
-function writeDrawnParamsInHtml() {
-  sumOfDrawnParameters = getSum(drawnParameters);
+function showAlertBox(): void {
+  alertBox.style.visibility = "visible";
+}
 
+function hideAlertBox(): void {
+  alertBox.style.visibility = "hidden";
+}
+
+function setSumAndDifferenceHandlersValuesInMainPageAndModals() {
+  sumOfDrawnParameters = getSum(drawnParameters);
   differenceBetweenDrawnAndUsed = 0;
 
   sumHandler.innerText = sumOfDrawnParameters;
   saveModalSumHandler.innerText = sumOfDrawnParameters;
   loadModalNewSumHandler.innerText = sumOfDrawnParameters;
-
-  refreshAllParamsHandlersInMainPageAndModals();
 }
 
 function setInnerTextInHtmlHandlers(
@@ -169,6 +180,14 @@ function setInnerTextInHtmlHandlers(
 ): void {
   for (let i = 0; i < htmlHandlers.length; i++) {
     htmlHandlers[i].innerText = values[i];
+  }
+}
+
+/** others */
+
+function drawAllRandomParams() {
+  for (let i = 0; i < 6; i++) {
+    drawnParameters[i] = Math.floor(Math.random() * 13) + 6;
   }
 }
 

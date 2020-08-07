@@ -1,11 +1,11 @@
 "use strict";
-/** -------------------- Html Handlers declarations -------------------- */
+/** -------------------- Html Handlers -------------------- */
 var _a, _b;
 /** buttons */
 const drawButtonHandler = document.getElementById("draw");
 const saveButtonHandler = document.getElementById("save");
 const loadButtonHandler = document.getElementById("load");
-const allButtonsHandlers = document.getElementsByTagName("button");
+const paramButtonsHandlers = document.getElementsByClassName("param_button");
 /** items selected by class name */
 const mainPageParamHandlers = document.getElementsByClassName("param_handler");
 const saveModalParamHandlers = document.getElementsByClassName("param_handler_save");
@@ -23,43 +23,53 @@ var drawnParameters = [0, 0, 0, 0, 0, 0];
 var savedParameters = [0, 0, 0, 0, 0, 0];
 var sumOfDrawnParameters = 0;
 var differenceBetweenDrawnAndUsed = 0;
-/** -------------------- events binding with proper html handlers -------------------- */
+/** -------------------- events binding with html handlers -------------------- */
 drawButtonHandler === null || drawButtonHandler === void 0 ? void 0 : drawButtonHandler.addEventListener("click", () => drawButtonService());
 saveButtonHandler === null || saveButtonHandler === void 0 ? void 0 : saveButtonHandler.addEventListener("click", () => saveButtonService());
 loadButtonHandler === null || loadButtonHandler === void 0 ? void 0 : loadButtonHandler.addEventListener("click", () => loadButtonService());
 /** binding increasing and decresing functions to proper parameter buttons */
-for (let i = 0; i < allButtonsHandlers.length - 3; i++) {
-    let id = allButtonsHandlers[i].id;
+for (let i = 0; i < paramButtonsHandlers.length; i++) {
+    let id = paramButtonsHandlers[i].id;
     if (i % 2) {
-        (_a = allButtonsHandlers[i]) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => increaseParamButtonService(id));
+        (_a = paramButtonsHandlers[i]) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => increaseParamButtonService(id));
     }
     else {
-        (_b = allButtonsHandlers[i]) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => decreaseParamButtonService(id));
+        (_b = paramButtonsHandlers[i]) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => decreaseParamButtonService(id));
     }
 }
 /** -------------------- services -------------------- */
 function drawButtonService() {
-    generateParamsRandomValues();
-    alertBox.style.visibility = "hidden";
+    drawAllRandomParams();
+    hideAlertBox();
+    refreshAllParamsHandlersInMainPageAndModals();
+    setSumAndDifferenceHandlersValuesInMainPageAndModals();
 }
 function saveButtonService() {
     if (checkActionConditions()) {
         saveDrawnParamsInMemory();
-        alertBox.style.visibility = "hidden";
+        refreshLoadModalOldSumAndParamHandlers();
+        hideAlertBox();
     }
     else {
-        alertBox.style.visibility = "visible";
+        showAlertBox();
     }
 }
 function loadButtonService() {
     loadParamsFromMemory();
-    alertBox.style.visibility = "hidden";
+    refreshLoadModalOldSumAndParamHandlers();
+    hideAlertBox();
+    refreshAllParamsHandlersInMainPageAndModals();
+    setSumAndDifferenceHandlersValuesInMainPageAndModals();
 }
 function increaseParamButtonService(id) {
     increaseParamValue(id);
+    refreshAllParamsHandlersInMainPageAndModals();
+    hideAlertBox();
 }
 function decreaseParamButtonService(id) {
     decreaseParamValue(id);
+    refreshAllParamsHandlersInMainPageAndModals();
+    hideAlertBox();
 }
 /** -------------------- condition checkers -------------------- */
 function checkIncreaseParamConditions(id) {
@@ -74,58 +84,58 @@ function checkActionConditions() {
     return differenceBetweenDrawnAndUsed === 0;
 }
 /** -------------------- main functions -------------------- */
-function generateParamsRandomValues() {
-    drawAllRandomParams();
-    writeDrawnParamsInHtml();
-}
 function saveDrawnParamsInMemory() {
     savedParameters = setTo(drawnParameters);
-    setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
-    loadModalOldSumHandler.innerText = getSum(savedParameters);
 }
 function loadParamsFromMemory() {
     drawnParameters = setTo(savedParameters);
-    writeDrawnParamsInHtml();
 }
 function increaseParamValue(id) {
     if (checkIncreaseParamConditions(id)) {
         drawnParameters[id]++;
         differenceBetweenDrawnAndUsed--;
-        refreshAllParamsHandlersInMainPageAndModals();
-        alertBox.style.visibility = "hidden";
     }
 }
 function decreaseParamValue(id) {
     if (checkDecreaseParamConditions(id)) {
         drawnParameters[id]--;
         differenceBetweenDrawnAndUsed++;
-        refreshAllParamsHandlersInMainPageAndModals();
-        alertBox.style.visibility = "hidden";
     }
 }
 /** -------------------- specific functions -------------------- */
+/** html functionalities */
 function refreshAllParamsHandlersInMainPageAndModals() {
     setInnerTextInHtmlHandlers(drawnParameters, mainPageParamHandlers);
     setInnerTextInHtmlHandlers(drawnParameters, saveModalParamHandlers);
     setInnerTextInHtmlHandlers(drawnParameters, loadModalParamNewValues);
     differenceHandler.innerText = differenceBetweenDrawnAndUsed;
 }
-function drawAllRandomParams() {
-    for (let i = 0; i < 6; i++) {
-        drawnParameters[i] = Math.floor(Math.random() * 13) + 6;
-    }
+function refreshLoadModalOldSumAndParamHandlers() {
+    setInnerTextInHtmlHandlers(savedParameters, loadModalParamOldValues);
+    loadModalOldSumHandler.innerText = getSum(savedParameters);
 }
-function writeDrawnParamsInHtml() {
+function showAlertBox() {
+    alertBox.style.visibility = "visible";
+}
+function hideAlertBox() {
+    alertBox.style.visibility = "hidden";
+}
+function setSumAndDifferenceHandlersValuesInMainPageAndModals() {
     sumOfDrawnParameters = getSum(drawnParameters);
     differenceBetweenDrawnAndUsed = 0;
     sumHandler.innerText = sumOfDrawnParameters;
     saveModalSumHandler.innerText = sumOfDrawnParameters;
     loadModalNewSumHandler.innerText = sumOfDrawnParameters;
-    refreshAllParamsHandlersInMainPageAndModals();
 }
 function setInnerTextInHtmlHandlers(values, htmlHandlers) {
     for (let i = 0; i < htmlHandlers.length; i++) {
         htmlHandlers[i].innerText = values[i];
+    }
+}
+/** others */
+function drawAllRandomParams() {
+    for (let i = 0; i < 6; i++) {
+        drawnParameters[i] = Math.floor(Math.random() * 13) + 6;
     }
 }
 function getSum(parameters) {
